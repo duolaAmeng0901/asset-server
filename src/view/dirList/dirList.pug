@@ -1,0 +1,9 @@
+doctype html
+html(lang = "en")
+  head
+    title #{title}
+  body
+    div(id="wrapper")
+      each value, index in files
+        a(class="item", href= dir + '/' + value, style="display:block") #{value}
+
