@@ -9,6 +9,7 @@ const dirList = require('../view/dirList/dirList.js');
 const conf = require('../../config');
 const mime = require('../mime');
 const compress = require('../compress');
+const isFresh = require('../cache');
 
 module.exports = async (req, res, filePath) => {
 
@@ -16,6 +17,13 @@ module.exports = async (req, res, filePath) => {
     const stats = await stat(filePath);
 
     if(stats.isFile()) {
+
+      if(isFresh(stats, req, res)) {
+        res.statusCode = 304;
+        res.end();
+        return;
+      }
+
       res.statusCode = 200;
 
       const contentType = mime(filePath);
@@ -23,9 +31,9 @@ module.exports = async (req, res, filePath) => {
 
       let rs = fs.createReadStream(filePath);
 
-      // if(filePath.match(conf.compress)) {
-      //   rs = compress(rs, req, res);
-      // }
+      if(filePath.match(conf.compress)) {
+        rs = compress(rs, req, res);
+      }
 
       rs.pipe(res);
 

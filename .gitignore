@@ -7,7 +7,7 @@
 #有些日志文件后缀会带有日期
 npm-degug.log*
 
-#webStrom产生的配置文件夹
+#vscode产生的配置文件夹
 .vscode
 
 #vim 未编译完的文件
